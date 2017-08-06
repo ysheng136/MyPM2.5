@@ -1,13 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="PM2.5"
-        android:textSize="20sp"
-        />
+        android:layout_height="320dp">
+
+        <ImageView
+            android:id="@+id/imageViewId"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:scaleType="center"
+            android:src="@drawable/image" />
+
+        <TextView
+            android:id="@+id/numberPm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="47"
+            android:textSize="70sp" />
+
+        <TextView
+            android:id="@+id/namePm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/numberPm"
+            android:layout_toLeftOf="@id/numberPm"
+            android:text="PM2.5"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/air"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/numberPm"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/namePm"
+            android:text="空气状况:"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/airIfmation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/numberPm"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/air"
+            android:text="良"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/adivse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/air"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:text="健康建议：极少数异常敏感人群应减少户外活动"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/linearLyoutId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/imageViewId"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/aqiId"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="AQI:70[良]"
+                android:textColor="#ff0000"
+                android:paddingLeft="5dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="首要污染物:(细颗粒物(PM2.5))"
+                android:textColor="#ff0000"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/allIfirmationId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLyoutId">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CO"
+                    android:textSize="18sp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:gravity="center_horizontal"
+                    android:text="0.88"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PM10"
+                    android:textSize="18sp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="70"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="O3"
+                    android:textSize="18sp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="132"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SO2"
+                    android:textSize="18sp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="8"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NO2"
+                    android:textSize="18sp"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:text="10"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/detailIformationId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/allIfirmationId"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/wenDuId"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textSize="20sp"
+                android:text="27~37"/>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/sun"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:id="@+id/staticId"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:text="阵雨"/>
+
+            <TextView
+                android:id="@+id/dataId"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical|right"
+                android:text="星期天"
+                android:textSize="20sp" />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/mapLinearLeyoutId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.amap.api.maps2d.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
 </LinearLayout>
