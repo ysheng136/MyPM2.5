@@ -47,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //初始化监听器
         initEven();
 
+        //设置ViewPager的缓存界面数
+        viewPager.setOffscreenPageLimit(3);
+
 
 
         //添加Fragment数组

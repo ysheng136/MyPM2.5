@@ -3,7 +3,6 @@ package com.pm25.mypm25;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +46,15 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         //显示地图
         mapView = (MapView) view.findViewById(R.id.map);
 
+
+
         //必须要写
         mapView.onCreate(savedInstanceState);
         //获取地图对象
-        aMap = mapView.getMap();
+
+            aMap = mapView.getMap();
+
+
 
 
         //设置显示定位按钮 并且可以点击
@@ -73,8 +77,10 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         //开始定位
         initLoc();
 
+
         return view;
     }
+
 
 
     //定位
@@ -101,6 +107,8 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
         mLocationClient.startLocation();
+
+
     }
 
 
@@ -145,15 +153,15 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
                     isFirstLoc = false;
                 }
 
-
-            } else {
-                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-                Log.e("AmapError", "location Error, ErrCode:"
-                        + amapLocation.getErrorCode() + ", errInfo:"
-                        + amapLocation.getErrorInfo());
-
-                Toast.makeText(getActivity().getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
             }
+// else {
+//                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+//                Log.e("AmapError", "location Error, ErrCode:"
+//                        + amapLocation.getErrorCode() + ", errInfo:"
+//                        + amapLocation.getErrorInfo());
+//
+//                Toast.makeText(getActivity().getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
+//            }
         }
     }
 
@@ -192,6 +200,8 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
     }
 
 
+
+
     /**
      * 方法必须重写
      */
@@ -227,6 +237,8 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         super.onDestroy();
         mapView.onDestroy();
     }
+
+
 
 
 }
