@@ -28,6 +28,9 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "com.androidplot:androidplot-core:1.5.0"
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.google.code.gson:gson:2.7'
+
     compile files('libs/Amap_2DMap_V5.2.0_20170627.jar')
 
 

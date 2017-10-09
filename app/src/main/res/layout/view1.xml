@@ -3,6 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ScrollView
     android:id="@+id/scrollView_weather"
     android:layout_width="match_parent"
@@ -21,9 +26,11 @@
 
         <include layout="@layout/weatherforecast" />
 
+        <include layout="@layout/hourlyforecast" />
 
         <include layout="@layout/suggestion" />
 
     </LinearLayout>
     </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

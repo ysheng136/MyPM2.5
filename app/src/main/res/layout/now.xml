@@ -13,14 +13,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="40dp">
+        android:layout_margin="30dp">
 
     <TextView
         android:id="@+id/degree_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="30"
         android:textSize="90sp" />
 
     <TextView
@@ -30,12 +29,12 @@
         android:layout_toRightOf="@id/degree_text"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="5dp"
-        android:text="多云"
         android:textSize="30sp" />
     </RelativeLayout>
 
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp">
@@ -44,6 +43,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
             >
             <LinearLayout
                 android:orientation="vertical"
@@ -53,33 +54,42 @@
                 android:id="@+id/wind_text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="东北风"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
                 android:textSize="20sp" />
             <TextView
                 android:id="@+id/wind_text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="2级"
                 android:textSize="20sp"/>
             </LinearLayout>
 
         </RelativeLayout>
 
+            <!--<view-->
+                <!--android:layout_width="1dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="10dp"-->
+                <!--/>-->
+
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
             >
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:text="相对湿度"
                     android:textSize="20sp" />
                 <TextView
@@ -87,16 +97,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="70%"
                     android:textSize="20sp"/>
             </LinearLayout>
 
         </RelativeLayout>
 
+        <!--<view-->
+            <!--android:layout_width="1dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp"/>-->
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
             >
             <LinearLayout
                 android:orientation="vertical"
@@ -105,7 +121,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="体感温度"
                     android:textSize="20sp" />
                 <TextView
@@ -113,7 +130,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="30"
                     android:textSize="20sp"/>
             </LinearLayout>
 

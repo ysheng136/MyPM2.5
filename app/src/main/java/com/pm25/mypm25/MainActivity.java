@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -36,10 +37,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageButton ib_city;
 
+    public String city_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.i("MainActivity", "onCreate: "+city_text);
+
+
 
         //初始化控件
         initView();
@@ -173,4 +179,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onPageScrollStateChanged(int state) {
 
     }
+
+    public String getCity_text() {
+        Log.i("MainActivity", "getCity_text: "+city_text);
+        return city_text;
+    }
+
+//    public void setCity_text(String city_text) {
+//        WeatherFragment mf= (WeatherFragment) ((MyFragmentPagerAdapter)viewPager.getAdapter()).currentFragment;
+//        TextView city = (TextView) mf.getView().findViewById(R.id.title_city);
+//        city.setText(city_text);
+//        this.city_text = city_text;
+//        Log.i("MainActivity", "setCity_text: "+this.city_text);
+//    }
+
 }

@@ -20,6 +20,8 @@ import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 
@@ -40,23 +42,23 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
     //标识，用于判断是否只显示一次定位信息和用户重新定位
     private boolean isFirstLoc = true;
 
+    //地图信息
+    private String city_Data;
+    private double latitude_data;
+    private double longitude_data;
+    private float accuracy_data;
+    private String district_data;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view2, container, false);
+
         //显示地图
         mapView = (MapView) view.findViewById(R.id.map);
-
-
-
         //必须要写
         mapView.onCreate(savedInstanceState);
         //获取地图对象
-
-            aMap = mapView.getMap();
-
-
-
-
+        aMap = mapView.getMap();
         //设置显示定位按钮 并且可以点击
         UiSettings settings = aMap.getUiSettings();
         //设置定位监听
@@ -65,7 +67,6 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         settings.setMyLocationButtonEnabled(true);
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
-
 
         //定位的小图标 默认是蓝点 这里自定义一团火，其实就是一张图片
         // MyLocationStyle myLocationStyle = new MyLocationStyle();
@@ -78,10 +79,9 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         initLoc();
 
 
+
         return view;
     }
-
-
 
     //定位
     private void initLoc() {
@@ -107,34 +107,37 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
         mLocationClient.startLocation();
-
-
     }
-
 
     //定位回调函数
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
-
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见官方定位类型表
-                amapLocation.getLatitude();//获取纬度
-                amapLocation.getLongitude();//获取经度
-                amapLocation.getAccuracy();//获取精度信息
+                latitude_data = amapLocation.getLatitude();//获取纬度
+                longitude_data = amapLocation.getLongitude();//获取经度
+                accuracy_data = amapLocation.getAccuracy();//获取精度信息
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(amapLocation.getTime());
                 df.format(date);//定位时间
                 amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
                 amapLocation.getCountry();//国家信息
                 amapLocation.getProvince();//省信息
-                amapLocation.getCity();//城市信息
-                amapLocation.getDistrict();//城区信息
+                city_Data = amapLocation.getCity();//城市信息
+                district_data = amapLocation.getDistrict();//城区信息
                 amapLocation.getStreet();//街道信息
                 amapLocation.getStreetNum();//街道门牌号信息
                 amapLocation.getCityCode();//城市编码
                 amapLocation.getAdCode();//地区编码
+
+                //发送消息到天气界面
+                EventBus.getDefault().post(new MapMessage(city_Data,latitude_data,longitude_data,district_data));
+
+
+
+                }
 
                 // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
                 if (isFirstLoc) {
@@ -151,9 +154,16 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
                     buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
                     Toast.makeText(getActivity().getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
                     isFirstLoc = false;
+
+
+
+
                 }
 
+
             }
+
+
 // else {
 //                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
 //                Log.e("AmapError", "location Error, ErrCode:"
@@ -163,7 +173,7 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
 //                Toast.makeText(getActivity().getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
 //            }
         }
-    }
+
 
     //自定义一个图钉，并且设置图标，当我们点击图钉时，显示设置的信息
     private MarkerOptions getMarkerOptions(AMapLocation amapLocation) {
@@ -183,7 +193,6 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         options.period(60);
 
         return options;
-
     }
 
     //激活定位
@@ -198,9 +207,6 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
     public void deactivate() {
         mListener = null;
     }
-
-
-
 
     /**
      * 方法必须重写
@@ -237,8 +243,5 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         super.onDestroy();
         mapView.onDestroy();
     }
-
-
-
 
 }
