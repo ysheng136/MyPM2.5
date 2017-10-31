@@ -3,4 +3,6 @@
     <color name="colorPrimary">#FF3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorIcno">#6500BFFF</color>
+    <color name="sportIcno">#6576EE00</color>
 </resources>

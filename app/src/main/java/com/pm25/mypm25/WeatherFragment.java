@@ -1,27 +1,27 @@
 package com.pm25.mypm25;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pm25.mypm25.gson.Weather;
-import com.pm25.mypm25.gson2.Daily_Skycon;
-import com.pm25.mypm25.gson2.Daily_aqi;
-import com.pm25.mypm25.gson2.Daily_temperature;
-import com.pm25.mypm25.gson2.Forecast;
-import com.pm25.mypm25.gson2.Hourly_Skycon;
-import com.pm25.mypm25.gson2.Hourly_aqi;
-import com.pm25.mypm25.gson2.Hourly_temperature;
+import com.pm25.mypm25.gson3.Daily;
+import com.pm25.mypm25.gson3.Forecast2;
+import com.pm25.mypm25.gson3.Hourly;
+import com.pm25.mypm25.service.AutoUpdateService;
 import com.pm25.mypm25.util.HttpUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +40,6 @@ import okhttp3.Response;
 
 public class WeatherFragment extends Fragment {
 
-    private String TAG = "weather";
     //标题栏控件
     private TextView title_city;
     private TextView title_time;
@@ -52,35 +51,28 @@ public class WeatherFragment extends Fragment {
     private TextView wind_text2;
     private TextView wet_text;
     private TextView temp_text;
+    private TextView qlty_text;
 
     //suggestion
-    private TextView comfort_text;
     private TextView dress_text;
     private TextView ultraviolet_text;
     private TextView sport_text;
     private TextView wash_car_text;
+    private TextView comfort_now_text;
 
-    //forecast_item控件
-    //    private TextView date_text;
-    //    private TextView weather_text;
-    //    private ImageView iv_weather_png;
-    //    private TextView aqi_text;
-    //    private TextView max_text;
-    //    private TextView min_text;
-
+    //下滑刷新控件
     private SwipeRefreshLayout swipeRefresh;
 
     private LinearLayout forecastLayout;
 
+    private RecyclerView recyclerView;
+
+
     //地图信息
-    private String city_data;
+    private String city_data;    //城市
     private double latitude_data; //纬度
     private double longitude_data;  //经度
-    private String district_data;
-
-    //
-    private TextView description_text;
-
+    private String district_data;  //地区
 
 
     @Nullable
@@ -89,7 +81,6 @@ public class WeatherFragment extends Fragment {
 
         //初始化控件
         init(view);
-
         //注册EventBus
         EventBus.getDefault().register(this);
 
@@ -108,79 +99,81 @@ public class WeatherFragment extends Fragment {
         wind_text2 = (TextView) view.findViewById(R.id.wind_text2);
         wet_text = (TextView) view.findViewById(R.id.wet_text);
         temp_text = (TextView) view.findViewById(R.id.temp_text);
-        comfort_text = (TextView) view.findViewById(R.id.comfort_text);
+        qlty_text = (TextView) view.findViewById(R.id.qlty_info);
         dress_text = (TextView) view.findViewById(R.id.dress_text);
         ultraviolet_text = (TextView) view.findViewById(R.id.ultraviolet_text);
         sport_text = (TextView) view.findViewById(R.id.sport_text);
         wash_car_text = (TextView) view.findViewById(R.id.wash_car_text);
         forecastLayout = (LinearLayout) view.findViewById(R.id.forecast_layout);
-        description_text = (TextView) view.findViewById(R.id.description_text);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        comfort_now_text = (TextView)view.findViewById(R.id.comfort_now_text);
 
-        swipeRefresh = (SwipeRefreshLayout)view.findViewById(R.id.swipe_refresh);
+        //下拉刷新
+        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-
 
     }
 
     @Subscribe
     public void onEvent(MapMessage mapMessage) {
+
+        //位置信息
         city_data = mapMessage.getCity_data();
         latitude_data = mapMessage.getLatitude_data();
         longitude_data = mapMessage.getLongitude_data();
         district_data = mapMessage.getDistrict_data();
 
-        Log.i(TAG, "onCreateView: " + latitude_data + " " + longitude_data);
-
-        // SharedPreferences 存储
+        // SharedPreferences 存储 和风天气
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String weatherString = prefs.getString("weather", null);
 
-        SharedPreferences prefs2 = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String forecastString = prefs2.getString("forecast", null);
-        Log.i(TAG, "forecastString: " + forecastString);
+        // SharedPreferences 存储阿里云天气
+        SharedPreferences prefs3 = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String forecastString2 = prefs3.getString("forecast2", null);
 
         /*
-        天气情况
+            天气情况
          */
-        if (weatherString != null || forecastString != null) {
-            //天气情况 有缓存时直接解析数据
+        if (weatherString != null || forecastString2 != null) {
+            //和风天气情况 有缓存时直接解析数据
             Weather weather = HttpUtil.handleWeatherResponse(weatherString);
             showWeatherInfo(weather);
 
-            //天气预报 有缓存时直接解析数据
-            Forecast forecast = HttpUtil.handleForecastResponse(forecastString);
-            showResultInfo(forecast);
+            //阿里云天气预报 有缓存时直接解析数据
+            Forecast2 forecast2 = HttpUtil.handleForecastResponse2(forecastString2);
+            showResultInfo2(forecast2);
 
         } else {
             //天气情况 无缓存时根据经纬度去服务器查询天气
             requestWeather(longitude_data, latitude_data);
 
-            //天气预报 无缓存时根据经纬度去服务器查询天气
-            requestForecast(longitude_data, latitude_data);
+            //阿里云天气预报 无缓存时根据经纬度去服务器查询天气
+            requestForecast2(longitude_data, latitude_data);
         }
 
+        //设置城市地区
         title_city.setText(city_data + "|" + district_data);
-        Log.i("weather", "onEvent: " + "经度" + longitude_data + "纬度" + latitude_data);
 
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+        //下拉刷新
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //和风天气
                 requestWeather(longitude_data, latitude_data);
-                requestForecast(longitude_data, latitude_data);
+                //阿里云天气
+                requestForecast2(longitude_data, latitude_data);
             }
         });
-
-
     }
 
     /**
-     * 根据经纬度请求城市天气信息
+     * 根据经纬度请求和风城市天气信息
      */
     public void requestWeather(double longitude_data, double latitude_data) {
-        Log.i(TAG, "requestWeather: " + "经度" + longitude_data + "纬度" + latitude_data);
+        //和风的天气接口
         final String weatherUrl = "https://free-api.heweather.com/v5/weather?city=" + longitude_data + "," +
                 latitude_data + "&key=0e51a1c839234a8a84789c9f349cfe15";
-
+        //解析接口数据
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
@@ -188,7 +181,6 @@ public class WeatherFragment extends Fragment {
                 final String responseData = response.body().string();
 
                 final Weather weather = HttpUtil.handleWeatherResponse(responseData);
-
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -202,11 +194,9 @@ public class WeatherFragment extends Fragment {
                             Toast.makeText(getContext(), "获取天气信息失败", Toast.LENGTH_SHORT).show();
                         }
                         swipeRefresh.setRefreshing(false);
-
                     }
                 });
             }
-
             @Override
             public void onFailure(Call call, IOException e) {
                 getActivity().runOnUiThread(new Runnable() {
@@ -222,45 +212,31 @@ public class WeatherFragment extends Fragment {
 
 
     /**
-     * 根据经纬度请求城市天气预报信息
+     * 根据经纬度请求阿里云城市天气预报信息
      */
-    public void requestForecast(double longitude_data, double latitude_data) {
-
-        Log.i(TAG, "requestForecast: " + longitude_data + latitude_data);
-
-        final String forecastUrl = "https://api.caiyunapp.com/v2/Nf8ohAGoXcBVU-Xj/" + longitude_data + "," +
-                latitude_data + "/forecast.json";
-
-        HttpUtil.sendOkHttpRequest(forecastUrl, new Callback() {
+    public void requestForecast2(double longitude_data, double latitude_data) {
+        //阿里云的天气接口
+        final String weatherUrl = "http://jisutqybmf.market.alicloudapi.com/weather/query?location=" + latitude_data + "," + longitude_data;
+        //解析接口数据
+        HttpUtil.sendOkHttpRequest2(weatherUrl, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                //服务器返回的数据
                 final String responseData = response.body().string();
-
-                Log.i(TAG, "onResponse: " + responseData);
-
-                final Forecast forecast = HttpUtil.handleForecastResponse(responseData);
-
-                Log.i(TAG, "OnForecast : " + forecast);
+                final Forecast2 forecast2 = HttpUtil.handleForecastResponse2(responseData);
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (forecast != null && "ok".equals(forecast.getStatus())
-                                && "ok".equals(forecast.getResult().getHourly().getStatus())
-                                && "ok".equals(forecast.getResult().getDaily().getStatus())
-                                ) {
+                        if (forecast2 != null && "0".equals(forecast2.getStatus()) && "ok".equals(forecast2.getMsg())) {
                             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
-                            editor.putString("forecast", responseData);
+                            editor.putString("forecast2", responseData);
                             editor.apply();
-                            showResultInfo(forecast);
+                            showResultInfo2(forecast2);
                         } else {
                             Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
                         }
                         swipeRefresh.setRefreshing(false);
-
-
                     }
                 });
             }
@@ -270,7 +246,7 @@ public class WeatherFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(), "获取天气信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
                     }
                 });
@@ -278,12 +254,14 @@ public class WeatherFragment extends Fragment {
         });
     }
 
-
     /**
-     * 处理并展示Weather实体类中的数据
+     * 处理并展示和风Weather实体类中的数据
      */
     public void showWeatherInfo(Weather weather) {
-        String updateTime = weather.basic.update.updateTime.split(" ")[1];
+
+        Intent intent = new Intent(getActivity(), AutoUpdateService.class);
+        getActivity().startService(intent);
+
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
         String windDirection = weather.now.wind.direction;
@@ -295,100 +273,120 @@ public class WeatherFragment extends Fragment {
         String dress = weather.suggestion.dress.info;
         String sport = weather.suggestion.sport.info;
         String ultraviolet = weather.suggestion.ultraviolet.info;
+
         degree_text.setText(degree);
         weather_info.setText(weatherInfo);
         wind_text1.setText(windDirection);
         wind_text2.setText(windscreen);
         wet_text.setText(wet);
         temp_text.setText(feelsLike);
-        comfort_text.setText(comfort);
+        comfort_now_text.setText(comfort);
         wash_car_text.setText(carWash);
         dress_text.setText(dress);
         sport_text.setText(sport);
         ultraviolet_text.setText(ultraviolet);
-        title_time.setText(updateTime);
     }
-
 
     /**
-     * 处理并展示Result实体类中的数据
+     * 处理并展示阿里云Result实体类中的数据
      */
-    public void showResultInfo(Forecast forecast) {
+    public void showResultInfo2(Forecast2 forecast2) {
 
-        //Daily预报信息
-        showDailyForecast(forecast);
-        //Hourly预报信息
-        showHourlyForecast(forecast);
+        Intent intent = new Intent(getActivity(), AutoUpdateService.class);
+        getActivity().startService(intent);
 
+        String updatetime = forecast2.getResult().getUpdatetime().substring(11,16);
+        title_time.setText(updatetime);
 
+        String qlty = forecast2.getResult().getAqi().getQuality();
+        qlty_text.setText(qlty);
+
+        //设置aily预测
+        showDailyForecast2(forecast2);
+
+        //设置Hourly预测
+        List<Hourly> hourly = forecast2.getResult().getHourly();
+        //指定RecyclerView的布局方式
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerView.setLayoutManager(layoutManager);
+        //适配器设置
+        WeatherAdapter weatherAdapter = new WeatherAdapter(hourly);
+        recyclerView.setAdapter(weatherAdapter);
     }
 
-    public void showDailyForecast(Forecast forecast){
-
-        //天气情况
-        String skycon = null;
-        List<Daily_Skycon> ids = forecast.getResult().getDaily().getSkycon();
-        List<Daily_aqi> ida = forecast.getResult().getDaily().getAqi();
-        List<Daily_temperature> idt = forecast.getResult().getDaily().getTemperature();
+    /*
+    处理并展示阿里云Daily实体类中的数据
+     */
+    public void showDailyForecast2(Forecast2 forecast2) {
 
         forecastLayout.removeAllViews();
-        for (Daily_Skycon s : ids) {
-            switch (s.getValue()) {
-                case "PARTLY_CLOUDY_DAY":
-                case "PARTLY_CLOUDY_NIGHT":
-                    skycon = "多云";
-                    break;
-                case "CLEAR_DAY":
-                case "CLEAR_NIGHT":
-                    skycon = "晴";
-                    break;
-                case "CLOUDY":
-                    skycon = "阴";
-                    break;
-                case "RAIN":
-                    skycon = "雨";
-                    break;
-                case "SNOW":
-                    skycon = "雪";
-                    break;
-                case "WIND":
-                    skycon = "风";
-                    break;
-                case "FOG":
-                    skycon = "雾";
-                    break;
-            }
+        List<Daily> dailyList = forecast2.getResult().getDaily();
 
-            for (Daily_temperature t : idt) {
-                if (s.getDate().equals(t.getDate())) {
-                    //将预测列表添加到预测布局
-                    View view = LayoutInflater.from(getContext()).inflate(R.layout.forecast_item, forecastLayout, false);
-                    TextView date_text = (TextView) view.findViewById(R.id.date_text);
-                    TextView weather_text = (TextView) view.findViewById(R.id.weather_text);
-                    TextView max_text = (TextView) view.findViewById(R.id.Max_text);
-                    TextView min_text = (TextView) view.findViewById(R.id.Min_text);
+        for (Daily d : dailyList) {
+            //将预测列表添加到预测布局
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.forecast_item, forecastLayout, false);
+            TextView date_text = (TextView) view.findViewById(R.id.date_text);
+            TextView weather_text = (TextView) view.findViewById(R.id.weather_text);
+            TextView max_text = (TextView) view.findViewById(R.id.Max_text);
+            TextView min_text = (TextView) view.findViewById(R.id.Min_text);
+            ImageView image = (ImageView)view.findViewById(R.id.iv_weather_png);
 
-                    date_text.setText(t.getDate());
-                    max_text.setText((int) t.getMax() + "°");
-                    min_text.setText((int) t.getMin() + "°");
-                    weather_text.setText(skycon);
-                    forecastLayout.addView(view);
-                }
+            date_text.setText(d.getDate());
+            max_text.setText(d.getDay().getTemphigh() + "°");
+            min_text.setText(d.getNight().getTemplow() + "°");
+            weather_text.setText(d.getDay().getWeather());
+
+            int img = 0;
+            switch (d.getDay().getImg()){
+                case "0": img = R.drawable.a0;break;
+                case "1": img = R.drawable.a1;break;
+                case "2": img = R.drawable.a2;break;
+                case "3": img = R.drawable.a3;break;
+                case "4": img = R.drawable.a4;break;
+                case "5": img = R.drawable.a5;break;
+                case "6": img = R.drawable.a6;break;
+                case "7": img = R.drawable.a7;break;
+                case "8": img = R.drawable.a8;break;
+                case "9": img = R.drawable.a9;break;
+                case "10": img = R.drawable.a10;break;
+                case "11": img = R.drawable.a11;break;
+                case "12": img = R.drawable.a12;break;
+                case "13": img = R.drawable.a13;break;
+                case "14": img = R.drawable.a14;break;
+                case "15": img = R.drawable.a15;break;
+                case "16": img = R.drawable.a16;break;
+                case "17": img = R.drawable.a17;break;
+                case "18": img = R.drawable.a18;break;
+                case "19": img = R.drawable.a19;break;
+                case "20": img = R.drawable.a20;break;
+                case "21": img = R.drawable.a21;break;
+                case "22": img = R.drawable.a22;break;
+                case "23": img = R.drawable.a23;break;
+                case "24": img = R.drawable.a24;break;
+                case "25": img = R.drawable.a25;break;
+                case "26": img = R.drawable.a26;break;
+                case "27": img = R.drawable.a27;break;
+                case "28": img = R.drawable.a28;break;
+                case "29": img = R.drawable.a29;break;
+                case "30": img = R.drawable.a30;break;
+                case "31": img = R.drawable.a31;break;
+                case "32": img = R.drawable.a32;break;
+                case "49": img = R.drawable.a49;break;
+                case "53": img = R.drawable.a53;break;
+                case "54": img = R.drawable.a54;break;
+                case "55": img = R.drawable.a55;break;
+                case "56": img = R.drawable.a56;break;
+                case "57": img = R.drawable.a57;break;
+                case "58": img = R.drawable.a58;break;
+                case "99": img = R.drawable.a99;break;
+                case "301": img = R.drawable.a301;break;
+                case "302": img = R.drawable.a302;break;
             }
+            image.setImageResource(img);
+            forecastLayout.addView(view);
         }
-
     }
-
-    public void showHourlyForecast(Forecast forecast){
-        //预报信息
-        String desription = forecast.getResult().getHourly().getDescription();
-        List<Hourly_Skycon> ihs = forecast.getResult().getHourly().getSkycon();
-        List<Hourly_temperature> iht = forecast.getResult().getHourly().getTemperature();
-        List<Hourly_aqi> iha = forecast.getResult().getHourly().getAqi();
-
-        description_text.setText(desription);
-    }
-
 
     @Override
     public void onDestroy() {

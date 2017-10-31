@@ -1,16 +1,20 @@
 package com.pm25.mypm25;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,ViewPager.OnPageChangeListener{
     private List<Fragment> fragmentList;
     private FragmentPagerAdapter fragmentPagerAdapter;
-    private ViewPager viewPager;
+    private static ViewPager viewPager;
 
     private LinearLayout ll_weather;
     private LinearLayout ll_pm25;
@@ -43,9 +47,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("MainActivity", "onCreate: "+city_text);
 
-
+        List<String> permissionList = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.
+                ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.
+                READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.
+                WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if(!permissionList.isEmpty()) {
+            String [] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
+        }
 
         //初始化控件
         initView();
@@ -55,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //设置ViewPager的缓存界面数
         viewPager.setOffscreenPageLimit(3);
-
-
 
         //添加Fragment数组
         fragmentList = new ArrayList<>();
@@ -68,8 +85,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(),fragmentList);
         viewPager.setAdapter(myFragmentPagerAdapter);
 
-
     }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults){
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0) {
+                    for (int result : grantResults){
+                        if (result != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(this,"必须同意所有权限才能使用本程序",Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
+                    }
+                }else{
+                    Toast.makeText(this,"发生未知错误", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            default:
+        }
+    }
+
 
     private void initView(){
         //底部菜单4个Linearlayout
@@ -89,16 +127,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_pm25 = (TextView) findViewById(R.id.tv_pm25);
         tv_pre = (TextView) findViewById(R.id.tv_pre);
         tv_city = (TextView) findViewById(R.id.tv_city);
-
     }
 
+    //点击事件
     private void initEven(){
-
         ll_weather.setOnClickListener(this);
         ll_pm25.setOnClickListener(this);
         ll_pre.setOnClickListener(this);
         ll_city.setOnClickListener(this);
-
         viewPager.addOnPageChangeListener(this);
     }
 
@@ -117,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.ll_pre:
-                iv_pre.setImageResource(R.drawable.tab_pre_pressed);
+                iv_pre.setImageResource(R.drawable.table_pre_pressed);
                 tv_pre.setTextColor(0xff63B8FF);
                 viewPager.setCurrentItem(2);
                 break;
@@ -134,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void restartButton(){
         iv_weather.setImageResource(R.drawable.tab_weather_normal);
         iv_pm25.setImageResource(R.drawable.tab_pm25_normal);
-        iv_pre.setImageResource(R.drawable.tab_pre_normal);
+        iv_pre.setImageResource(R.drawable.table_pre_normal);
         iv_city.setImageResource(R.drawable.tab_city_normal);
 
         tv_weather.setTextColor(0x40000000);
@@ -142,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_pre.setTextColor(0x40000000);
         tv_city.setTextColor(0x40000000);
     }
+
+
+
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -161,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 tv_pm25.setTextColor(0xff63B8FF);
                 break;
             case 2:
-                iv_pre.setImageResource(R.drawable.tab_pre_pressed);
+                iv_pre.setImageResource(R.drawable.table_pre_pressed);
                 tv_pre.setTextColor(0xff63B8FF);
                 break;
             case 3:
@@ -180,17 +219,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public String getCity_text() {
-        Log.i("MainActivity", "getCity_text: "+city_text);
-        return city_text;
-    }
 
-//    public void setCity_text(String city_text) {
-//        WeatherFragment mf= (WeatherFragment) ((MyFragmentPagerAdapter)viewPager.getAdapter()).currentFragment;
-//        TextView city = (TextView) mf.getView().findViewById(R.id.title_city);
-//        city.setText(city_text);
-//        this.city_text = city_text;
-//        Log.i("MainActivity", "setCity_text: "+this.city_text);
-//    }
+
+
+
 
 }

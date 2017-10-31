@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#10000000"
+    android:background="#05000000"
 
     >
 
@@ -19,15 +18,16 @@
             android:id="@+id/iv_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/tab_weather_normal" />
+            android:layout_marginTop="4dp"
+            android:src="@drawable/tab_weather_normal"
+            android:alpha="0.5"
+            />
 
         <TextView
             android:id="@+id/tv_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="5dp"
             android:text="天气"
             android:textSize="15sp"
             android:textColor="#40000000"
@@ -46,15 +46,15 @@
             android:id="@+id/iv_pm25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/tab_pm25_normal" />
+            android:layout_marginTop="4dp"
+            android:src="@drawable/tab_pm25_normal"
+            android:alpha="0.5"/>
 
         <TextView
             android:id="@+id/tv_pm25"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="5dp"
             android:text="PM2.5"
             android:textSize="15sp"
             android:textColor="#40000000"
@@ -73,15 +73,15 @@
             android:id="@+id/iv_pre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/tab_pre_normal" />
+            android:layout_marginTop="4dp"
+            android:src="@drawable/table_pre_normal"
+            android:alpha="0.5"/>
 
         <TextView
             android:id="@+id/tv_pre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="5dp"
             android:text="预测"
             android:textSize="15sp"
             android:textColor="#40000000"
@@ -100,15 +100,15 @@
             android:id="@+id/iv_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/tab_city_normal" />
+            android:layout_marginTop="4dp"
+            android:src="@drawable/tab_city_normal"
+            android:alpha="0.5"/>
 
         <TextView
             android:id="@+id/tv_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="5dp"
             android:text="城市排名"
             android:textSize="15sp"
             android:textColor="#40000000"

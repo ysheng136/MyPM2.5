@@ -1,11 +1,18 @@
 package com.pm25.mypm25;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -19,11 +26,17 @@ import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.UiSettings;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
-
+import com.pm25.mypm25.gson3.Forecast2;
+import com.pm25.mypm25.service.AutoUpdateService;
+import com.pm25.mypm25.util.HttpUtil;
 import org.greenrobot.eventbus.EventBus;
-
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2017/7/29.
@@ -33,6 +46,20 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
     //显示地图需要的变量
     private MapView mapView;//地图控件
     private AMap aMap;//地图对象
+
+    //pm2.5控件信息
+    private TextView aqi;
+    private TextView co;
+    private TextView pm10;
+    private TextView o3;
+    private TextView so2;
+    private TextView no2;
+    private TextView qlty_info;
+    private TextView pm25;
+    private TextView pollutant;
+    private TextView advice;
+    private TextView effect;
+    private ImageView imageView;
 
     //定位需要的声明
     private AMapLocationClient mLocationClient = null;//定位发起端
@@ -53,6 +80,9 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view2, container, false);
 
+        //初始化控件
+        init(view);
+
         //显示地图
         mapView = (MapView) view.findViewById(R.id.map);
         //必须要写
@@ -68,19 +98,26 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
 
-        //定位的小图标 默认是蓝点 这里自定义一团火，其实就是一张图片
-        // MyLocationStyle myLocationStyle = new MyLocationStyle();
-        // myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
-        // myLocationStyle.radiusFillColor(android.R.color.transparent);
-        // myLocationStyle.strokeColor(android.R.color.transparent);
-        //  aMap.setMyLocationStyle(myLocationStyle);
 
         //开始定位
         initLoc();
 
-
-
         return view;
+    }
+
+    public void init(View view) {
+        aqi = (TextView) view.findViewById(R.id.aqiId);
+        co = (TextView) view.findViewById(R.id.coNumber);
+        pm10 = (TextView) view.findViewById(R.id.pm10Number);
+        o3 = (TextView) view.findViewById(R.id.o3Number);
+        so2 = (TextView) view.findViewById(R.id.so2Number);
+        no2 = (TextView) view.findViewById(R.id.no2Number);
+        qlty_info = (TextView) view.findViewById(R.id.qlty_info2);
+        pm25 = (TextView) view.findViewById(R.id.pm25_info);
+        advice = (TextView) view.findViewById(R.id.advice);
+        effect = (TextView) view.findViewById(R.id.effect);
+        pollutant = (TextView) view.findViewById(R.id.pollutant);
+        imageView = (ImageView) view.findViewById(R.id.imageViewId);
     }
 
     //定位
@@ -133,46 +170,46 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
                 amapLocation.getAdCode();//地区编码
 
                 //发送消息到天气界面
-                EventBus.getDefault().post(new MapMessage(city_Data,latitude_data,longitude_data,district_data));
+                EventBus.getDefault().post(new MapMessage(city_Data, latitude_data, longitude_data, district_data));
 
+                // SharedPreferences 存储阿里云天气
+                SharedPreferences prefs3 = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String forecastString2 = prefs3.getString("forecast4", null);
+                Log.i(TAG, "forecastString2: " + forecastString2);
 
+            /*
+             pm2.5情况
+             */
+                if (forecastString2 != null) {
 
+                    //阿里云天气预报 有缓存时直接解析数据
+                    Forecast2 forecast2 = HttpUtil.handleForecastResponse2(forecastString2);
+                    showResultInfo2(forecast2);
+
+                } else {
+                    //阿里云天气预报 无缓存时根据经纬度去服务器查询天气
+                    requestForecast2(longitude_data, latitude_data);
                 }
-
-                // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
-                if (isFirstLoc) {
-                    //设置缩放级别
-                    aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
-                    //将地图移动到定位点
-                    aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude())));
-                    //点击定位按钮 能够将地图的中心移动到定位点
-                    mListener.onLocationChanged(amapLocation);
-                    //添加图钉
-                    aMap.addMarker(getMarkerOptions(amapLocation));
-                    //获取定位信息
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
-                    Toast.makeText(getActivity().getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
-                    isFirstLoc = false;
-
-
-
-
-                }
-
-
             }
 
-
-// else {
-//                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
-//                Log.e("AmapError", "location Error, ErrCode:"
-//                        + amapLocation.getErrorCode() + ", errInfo:"
-//                        + amapLocation.getErrorInfo());
-//
-//                Toast.makeText(getActivity().getApplicationContext(), "定位失败", Toast.LENGTH_LONG).show();
-//            }
+            // 如果不设置标志位，此时再拖动地图时，它会不断将地图移动到当前的位置
+            if (isFirstLoc) {
+                //设置缩放级别
+                aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
+                //将地图移动到定位点
+                aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude())));
+                //点击定位按钮 能够将地图的中心移动到定位点
+                mListener.onLocationChanged(amapLocation);
+                //添加图钉
+                aMap.addMarker(getMarkerOptions(amapLocation));
+                //获取定位信息
+                StringBuffer buffer = new StringBuffer();
+                buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
+                Toast.makeText(getActivity().getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
+                isFirstLoc = false;
+            }
         }
+    }
 
 
     //自定义一个图钉，并且设置图标，当我们点击图钉时，显示设置的信息
@@ -195,11 +232,77 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         return options;
     }
 
+    /**
+     * 根据经纬度请求阿里云城市天气预报信息
+     */
+    public void requestForecast2(double longitude_data, double latitude_data) {
+
+        final String weatherUrl = "http://jisutqybmf.market.alicloudapi.com/weather/query?location=" + latitude_data + "," + longitude_data;
+        HttpUtil.sendOkHttpRequest2(weatherUrl, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                final String responseData = response.body().string();
+                final Forecast2 forecast2 = HttpUtil.handleForecastResponse2(responseData);
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (forecast2 != null && "0".equals(forecast2.getStatus()) && "ok".equals(forecast2.getMsg())) {
+                            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+                            editor.putString("forecast4", responseData);
+                            editor.apply();
+                            showResultInfo2(forecast2);
+                        } else {
+                            Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
+                        }
+                        //                        swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
+                        //                        swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        });
+    }
+
+
+    /**
+     * 处理并展示阿里云Result实体类中的数据
+     */
+
+    public void showResultInfo2(Forecast2 forecast2) {
+
+        Intent intent = new Intent(getActivity(), AutoUpdateService.class);
+        getActivity().startService(intent);
+
+        aqi.setText(forecast2.getResult().getAqi().getAqi());
+        co.setText(forecast2.getResult().getAqi().getCo());
+        so2.setText(forecast2.getResult().getAqi().getSo2());
+        no2.setText(forecast2.getResult().getAqi().getNo2());
+        o3.setText(forecast2.getResult().getAqi().getO3());
+        pm10.setText(forecast2.getResult().getAqi().getPm10());
+        pollutant.setText(forecast2.getResult().getAqi().getPrimarypollutant());
+        pm25.setText(forecast2.getResult().getAqi().getPm2_5());
+        qlty_info.setText(forecast2.getResult().getAqi().getQuality());
+        imageView.setBackgroundColor(Color.parseColor(forecast2.getResult().getAqi().getAqiinfo().getColor()));
+        advice.setText(forecast2.getResult().getAqi().getAqiinfo().getMeasure());
+        effect.setText(forecast2.getResult().getAqi().getAqiinfo().getAffect());
+    }
+
+
     //激活定位
     @Override
     public void activate(OnLocationChangedListener listener) {
         mListener = listener;
-
     }
 
     //停止定位

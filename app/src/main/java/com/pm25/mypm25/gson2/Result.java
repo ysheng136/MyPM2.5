@@ -9,6 +9,7 @@ public class Result {
     private  Hourly hourly;
     private  Daily daily;
 
+
     public Result() {
 
     }

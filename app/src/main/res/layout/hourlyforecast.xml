@@ -3,17 +3,18 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:layout_marginTop="10dp"
-              android:layout_marginLeft="15dp"
-              android:layout_marginRight="15dp"
-              android:layout_marginBottom="10dp"
-              android:background="#1222">
-    <TextView
-        android:id="@+id/description_text"
+              android:layout_marginTop="5dp"
+
+              android:layout_marginBottom="5dp"
+              android:background="#4087CEFA">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="wrap_content"
-        android:layout_height="200px"
-        android:layout_gravity="center"
-        android:textSize="30sp"
-        />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

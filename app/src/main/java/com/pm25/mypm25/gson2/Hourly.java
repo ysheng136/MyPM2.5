@@ -12,15 +12,9 @@ public class Hourly {
     private String description;
     private List<Hourly_Skycon> skycon;
     private List<Hourly_aqi> aqi;
-    private List<Hourly_temperature> temperature;
+    private List<Hourly_Date> temperature;
+    private List<Hourly_pm25> pm25;
 
-    public Hourly(String status, String description, List<Hourly_Skycon> skycon, List<Hourly_aqi> aqi, List<Hourly_temperature> temperature) {
-        this.status = status;
-        this.description = description;
-        this.skycon = skycon;
-        this.aqi = aqi;
-        this.temperature = temperature;
-    }
 
     public String getStatus() {
         return status;
@@ -54,12 +48,20 @@ public class Hourly {
         this.aqi = aqi;
     }
 
-    public List<Hourly_temperature> getTemperature() {
+    public List<Hourly_Date> getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(List<Hourly_temperature> temperature) {
+    public void setTemperature(List<Hourly_Date> temperature) {
         this.temperature = temperature;
+    }
+
+    public List<Hourly_pm25> getPm25() {
+        return pm25;
+    }
+
+    public void setPm25(List<Hourly_pm25> pm25) {
+        this.pm25 = pm25;
     }
 
     @Override
@@ -70,6 +72,7 @@ public class Hourly {
                 ", skycon=" + skycon +
                 ", aqi=" + aqi +
                 ", temperature=" + temperature +
+                ", pm25=" + pm25 +
                 '}';
     }
 }

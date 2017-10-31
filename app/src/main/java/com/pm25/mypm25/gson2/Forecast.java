@@ -10,9 +10,14 @@ public class Forecast {
 
     private Result result;
 
-    public Forecast(String status, Result result) {
-        this.status = status;
-        this.result = result;
+    private long server_time;
+
+    public long getServer_time() {
+        return server_time;
+    }
+
+    public void setServer_time(long server_time) {
+        this.server_time = server_time;
     }
 
     public String getStatus() {
@@ -31,11 +36,5 @@ public class Forecast {
         this.result = result;
     }
 
-    @Override
-    public String toString() {
-        return "Forecast{" +
-                "status='" + status + '\'' +
-                ", result=" + result +
-                '}';
-    }
+
 }

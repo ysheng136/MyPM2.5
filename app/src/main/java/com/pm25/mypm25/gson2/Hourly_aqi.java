@@ -7,7 +7,6 @@ package com.pm25.mypm25.gson2;
 public class Hourly_aqi {
 
     private int value;
-    private String datetime;
 
 
 
@@ -19,19 +18,5 @@ public class Hourly_aqi {
         this.value = value;
     }
 
-    public String getDatetime() {
-        return datetime;
-    }
 
-    public void setDatetime(String datetime) {
-        this.datetime = datetime;
-    }
-
-    @Override
-    public String toString() {
-        return "Hourly_aqi{" +
-                "value='" + value + '\'' +
-                ", datetime='" + datetime + '\'' +
-                '}';
-    }
 }
