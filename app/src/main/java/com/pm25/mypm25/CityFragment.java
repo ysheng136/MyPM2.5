@@ -224,7 +224,7 @@ public class CityFragment extends Fragment {
                             editor.apply();
                             showCityInfo(cityRank);
                         } else {
-                            Toast.makeText(getContext(), "获取城市排名信息失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "更新城市排名信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -235,7 +235,7 @@ public class CityFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(), "获取城市排名信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "更新城市排名信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         //                        swipeRefresh.setRefreshing(false);
                     }
                 });

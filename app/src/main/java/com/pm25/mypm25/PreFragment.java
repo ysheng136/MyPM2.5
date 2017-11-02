@@ -118,7 +118,7 @@ public class PreFragment extends Fragment {
                             editor.apply();
                             showPM25Info(forecast);
                         } else {
-                            Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -129,7 +129,7 @@ public class PreFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
 
                     }
                 });

@@ -191,7 +191,7 @@ public class WeatherFragment extends Fragment {
                             editor.apply();
                             showWeatherInfo(weather);
                         } else {
-                            Toast.makeText(getContext(), "获取天气信息失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         }
                         swipeRefresh.setRefreshing(false);
                     }
@@ -202,7 +202,7 @@ public class WeatherFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(), "获取天气信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
                     }
                 });
@@ -234,7 +234,7 @@ public class WeatherFragment extends Fragment {
                             editor.apply();
                             showResultInfo2(forecast2);
                         } else {
-                            Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         }
                         swipeRefresh.setRefreshing(false);
                     }
@@ -246,7 +246,7 @@ public class WeatherFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getContext(), "获取天气信息失败2", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
                     }
                 });
@@ -263,7 +263,6 @@ public class WeatherFragment extends Fragment {
         getActivity().startService(intent);
 
         String degree = weather.now.temperature + "℃";
-        String weatherInfo = weather.now.more.info;
         String windDirection = weather.now.wind.direction;
         String windscreen = weather.now.wind.screen + "级";
         String wet = weather.now.humidity + "%";
@@ -275,7 +274,6 @@ public class WeatherFragment extends Fragment {
         String ultraviolet = weather.suggestion.ultraviolet.info;
 
         degree_text.setText(degree);
-        weather_info.setText(weatherInfo);
         wind_text1.setText(windDirection);
         wind_text2.setText(windscreen);
         wet_text.setText(wet);
@@ -301,6 +299,9 @@ public class WeatherFragment extends Fragment {
         String qlty = forecast2.getResult().getAqi().getQuality();
         qlty_text.setText(qlty);
 
+        String weather = forecast2.getResult().getWeather();
+        weather_info.setText(weather);
+
         //设置aily预测
         showDailyForecast2(forecast2);
 
@@ -322,6 +323,7 @@ public class WeatherFragment extends Fragment {
 
         forecastLayout.removeAllViews();
         List<Daily> dailyList = forecast2.getResult().getDaily();
+
 
         for (Daily d : dailyList) {
             //将预测列表添加到预测布局

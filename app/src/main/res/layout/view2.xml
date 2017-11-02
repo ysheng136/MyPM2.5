@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh2"
+        android:layout_width="match_parent"
+        android:layout_height="380dp">
+
     <RelativeLayout
         android:id="@+id/relativeId"
         android:layout_width="match_parent"
         android:layout_height="380dp"
         android:background="#40DCDCDC">
+
+
 
         <ImageView
             android:id="@+id/imageViewId"
@@ -73,13 +80,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="影响："
+                android:textStyle="bold"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/effect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="极少数异常敏感人群应减少户外活动"
+                android:textStyle="bold"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -98,13 +106,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="建议："
+                android:textStyle="bold"
+                android:textColor="#AA0000"
                 android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/advice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="极少数异常敏感人群应减少户外活动"
+                android:textStyle="bold"
+                android:textColor="#AA0000"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -300,7 +311,11 @@
             </LinearLayout>
 
         </LinearLayout>
+
+
+
     </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/mapLinearLeyoutId"
