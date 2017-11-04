@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,8 +41,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by Administrator on 2017/7/29.
  */
@@ -51,6 +48,7 @@ import static android.content.ContentValues.TAG;
 public class PreFragment extends Fragment {
 
     private LineChart lineChart;
+
     private double latitude_data; //纬度
     private double longitude_data;  //经度
 
@@ -62,6 +60,7 @@ public class PreFragment extends Fragment {
         lineChart = (LineChart) view.findViewById(R.id.linechart);
 
         init();
+
 
         //进行EventBus的注册
         EventBus.getDefault().register(this);
@@ -82,12 +81,12 @@ public class PreFragment extends Fragment {
             //彩云天气预报 有缓存时直接解析数据
             Forecast forecast = HttpUtil.handleForecastResponse(forecastString);
             showPM25Info(forecast);
+
         } else {
             //彩云天气预报 无缓存时根据经纬度去服务器查询天气
             requestForecast(longitude_data, latitude_data);
         }
     }
-
 
     /**
      * 根据经纬度请求彩云城市天气预报信息
@@ -117,6 +116,7 @@ public class PreFragment extends Fragment {
                             editor.putString("forecast", responseData);
                             editor.apply();
                             showPM25Info(forecast);
+
                         } else {
                             Toast.makeText(getContext(), "更新天气信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
                         }
@@ -204,8 +204,6 @@ public class PreFragment extends Fragment {
         List<Hourly_pm25> pm25 = forecast.getResult().getHourly().getPm25();
         List<Hourly_Date> date = forecast.getResult().getHourly().getTemperature();
 
-        Log.i(TAG, "111showPM25Info: "+ pm25);
-        Log.i(TAG, "222showPM25Info: " + date);
 
 //        List<Hourly_aqi> aqi = forecast.getResult().getHourly().getAqi();
 
@@ -275,6 +273,8 @@ public class PreFragment extends Fragment {
         }
 
     }
+
+
 
 
     @Override

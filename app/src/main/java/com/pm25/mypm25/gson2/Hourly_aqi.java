@@ -8,8 +8,6 @@ public class Hourly_aqi {
 
     private int value;
 
-
-
     public int getValue() {
         return value;
     }

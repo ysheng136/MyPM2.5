@@ -10,15 +10,6 @@ public class Forecast {
 
     private Result result;
 
-    private long server_time;
-
-    public long getServer_time() {
-        return server_time;
-    }
-
-    public void setServer_time(long server_time) {
-        this.server_time = server_time;
-    }
 
     public String getStatus() {
         return status;
@@ -35,6 +26,5 @@ public class Forecast {
     public void setResult(Result result) {
         this.result = result;
     }
-
 
 }

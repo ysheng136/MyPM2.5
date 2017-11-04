@@ -8,7 +8,6 @@ public class Hourly_pm25 {
 
     private String value;
 
-
     public String getValue() {
         return value;
     }
@@ -17,10 +16,4 @@ public class Hourly_pm25 {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return "Hourly_pm25{" +
-                "value='" + value + '\'' +
-                '}';
-    }
 }

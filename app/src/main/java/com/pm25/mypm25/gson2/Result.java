@@ -9,16 +9,6 @@ public class Result {
     private  Hourly hourly;
     private  Daily daily;
 
-
-    public Result() {
-
-    }
-
-    public Result(Hourly hourly, Daily daily) {
-        this.hourly = hourly;
-        this.daily = daily;
-    }
-
     public Hourly getHourly() {
         return hourly;
     }
@@ -35,11 +25,4 @@ public class Result {
         this.daily = daily;
     }
 
-    @Override
-    public String toString() {
-        return "Result{" +
-                "hourly=" + hourly +
-                ", daily=" + daily +
-                '}';
-    }
 }

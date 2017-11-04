@@ -1,7 +1,5 @@
 package com.pm25.mypm25.util;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.pm25.mypm25.gson.Weather;
 import com.pm25.mypm25.gson2.Forecast;
@@ -13,8 +11,6 @@ import org.json.JSONObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Administrator on 2017/8/7.
@@ -44,7 +40,6 @@ public class HttpUtil {
     public static void sendOkHttpRequest2(String address,okhttp3.Callback callback){
         //创建一个OkhttpClient实例
         OkHttpClient client = new OkHttpClient();
-
         String appcode = "49817b8e3f7b42e99e3b0dd5b4acb311";
         //创建一个Request对象
         Request request = new Request.Builder()
@@ -58,8 +53,6 @@ public class HttpUtil {
     }
 
 
-
-
     /*
         解析和风天气JSON数据
      */
@@ -69,9 +62,7 @@ public class HttpUtil {
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
             String weatherContent = jsonArray.getJSONObject(0).toString();
-            Log.i(TAG, "handleWeatherResponse:" + weatherContent);
             Weather weather = new Gson().fromJson(weatherContent,Weather.class);
-            Log.i(TAG, "handleWeatherResponse: " + weather);
             return weather;
 
         } catch (Exception e) {
@@ -80,7 +71,6 @@ public class HttpUtil {
         return null;
     }
 
-
     /*
         解析彩云天气预测JSON数据
      */
@@ -88,7 +78,6 @@ public class HttpUtil {
 
         try {
 
-            Log.i(TAG, "handleForecastResponse: " + response);
             Gson gson = new Gson();
             return  gson.fromJson(response,Forecast.class);
 
@@ -114,8 +103,6 @@ public class HttpUtil {
         }
         return null;
     }
-
-
 
     /*
         解析城市排名JSON数据

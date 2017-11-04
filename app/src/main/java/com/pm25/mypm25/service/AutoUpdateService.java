@@ -35,7 +35,6 @@ public class AutoUpdateService extends Service {
     private double latitude_data; //纬度
     private double longitude_data;  //经度
     private String district_data;
-    //    private MyLocationListener myLocationListener;
 
     public AutoUpdateService() {
     }
@@ -62,33 +61,7 @@ public class AutoUpdateService extends Service {
 
     }
 
-    //    @Override
-    //    public void onCreate() {
-    //        super.onCreate();
-    //        //获取位置管理对象
-    //        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-    //        //以最优的方式获得经纬度对象
-    //        Criteria criteria = new Criteria();
-    //        //不要求海拔信息
-    //        criteria.setAltitudeRequired(false);
-    //        //不要求方位信息
-    //        criteria.setBearingRequired(false);
-    //        //是否付费
-    //        criteria.setCostAllowed(true);
-    //        //对电量的要求
-    //        criteria.setPowerRequirement(Criteria.POWER_LOW);
-    //        //指定获取经纬度的精确度
-    //        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-    //
-    //        String bestProvider = locationManager.getBestProvider(criteria, true);
-    //
-    //        locationManager.requestLocationUpdates(bestProvider, 0, 0,
-    //                new MyLocationListener());
-    //
-    //
-    //    }
 
-    //
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -102,7 +75,6 @@ public class AutoUpdateService extends Service {
         //更新阿里云天气
         updateForecast2();
 
-
         //更新彩云天气
         updateForecast();
 
@@ -110,10 +82,10 @@ public class AutoUpdateService extends Service {
         updateForecast4();
 
 
-        //半小时更新一次
+        //三小时更新一次
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        int anHour = 1 * 30 * 60 * 1000; //半小时的毫秒数
+        int anHour = 3 * 60 * 60 * 1000; //三小时的毫秒数
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
 
         Intent i = new Intent(this, AutoUpdateService.class);
@@ -134,8 +106,6 @@ public class AutoUpdateService extends Service {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String cityRankString = prefs.getString("cityRank", null);
 
-        Log.i(TAG, "updateCiteRank: " + "1111111");
-
         if (cityRankString != null) {
 
             final String pm25Url = "https://ali-pm25.showapi.com/pm25-top";
@@ -145,9 +115,7 @@ public class AutoUpdateService extends Service {
                 public void onResponse(Call call, Response response) throws IOException {
 
                     final String responseData = response.body().string();
-
                     final CityRank cityRank = HttpUtil.handleCityRankResponse(responseData);
-
 
                     if (cityRank != null && 0 == cityRank.getShowapi_res_code() && "".equals(cityRank.getShowapi_res_error())) {
                         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(AutoUpdateService.this).edit();
@@ -281,7 +249,6 @@ public class AutoUpdateService extends Service {
         }
     }
 
-
     //更新阿里云天气
     private void updateForecast4() {
 
@@ -322,10 +289,10 @@ public class AutoUpdateService extends Service {
         }
     }
 
-        @Override
-        public void onDestroy () {
-            super.onDestroy();
-            EventBus.getDefault().unregister(this);
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
+}
 

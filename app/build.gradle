@@ -33,9 +33,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.androidplot:androidplot-core:1.5.1'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-
     compile files('libs/Amap_2DMap_V5.2.0_20170627.jar')
-
-
     testCompile 'junit:junit:4.12'
 }

@@ -59,7 +59,6 @@ public class CityFragment extends Fragment {
     private TextView title_rank2;
     private TextView title_time;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view4, container, false);
@@ -73,6 +72,7 @@ public class CityFragment extends Fragment {
         //柱形图初始化
         init();
         init2();
+
         // SharedPreferences 存储
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String cityRankString = prefs.getString("cityRank", null);
@@ -236,7 +236,6 @@ public class CityFragment extends Fragment {
                     @Override
                     public void run() {
                         Toast.makeText(getContext(), "更新城市排名信息失败，请开启网络连接", Toast.LENGTH_SHORT).show();
-                        //                        swipeRefresh.setRefreshing(false);
                     }
                 });
             }
@@ -318,7 +317,6 @@ public class CityFragment extends Fragment {
 
             BarData data = new BarData(dataSets);
             data.setValueTextSize(12f);
-//            data.setBarWidth(0.5f);
 
             barChart.setData(data);
             barChart.setFitBars(true);

@@ -5,11 +5,11 @@ package com.pm25.mypm25;
  */
 
 public class MapMessage {
+
     private String city_data;
     private double latitude_data;
     private double longitude_data;
     private String district_data;
-
 
     public MapMessage(String city_data, double latitude_data, double longitude_data, String district_data) {
         this.city_data = city_data;

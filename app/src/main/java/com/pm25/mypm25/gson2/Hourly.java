@@ -10,11 +10,9 @@ public class Hourly {
 
     private String status;
     private String description;
-    private List<Hourly_Skycon> skycon;
     private List<Hourly_aqi> aqi;
     private List<Hourly_Date> temperature;
     private List<Hourly_pm25> pm25;
-
 
     public String getStatus() {
         return status;
@@ -30,14 +28,6 @@ public class Hourly {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Hourly_Skycon> getSkycon() {
-        return skycon;
-    }
-
-    public void setSkycon(List<Hourly_Skycon> skycon) {
-        this.skycon = skycon;
     }
 
     public List<Hourly_aqi> getAqi() {
@@ -64,15 +54,4 @@ public class Hourly {
         this.pm25 = pm25;
     }
 
-    @Override
-    public String toString() {
-        return "Hourly{" +
-                "status='" + status + '\'' +
-                ", description='" + description + '\'' +
-                ", skycon=" + skycon +
-                ", aqi=" + aqi +
-                ", temperature=" + temperature +
-                ", pm25=" + pm25 +
-                '}';
-    }
 }

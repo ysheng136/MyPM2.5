@@ -1,327 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh2"
         android:layout_width="match_parent"
-        android:layout_height="380dp">
+        android:layout_height="350dp">
 
-    <RelativeLayout
-        android:id="@+id/relativeId"
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:background="#40DCDCDC">
-
-
-
-        <ImageView
-            android:id="@+id/imageViewId"
+        <RelativeLayout
+            android:id="@+id/relativeId"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:scaleType="center"
-            android:src="@drawable/image"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_height="350dp"
+            android:background="#40DCDCDC">
 
-        <TextView
-            android:id="@+id/pm25_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            android:layout_centerHorizontal="true"
-            android:text="47"
-            android:textSize="85sp"/>
+            <ImageView
+                android:id="@+id/imageViewId"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:alpha="0.9"
+                android:scaleType="center"
+                android:src="@drawable/image"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/pm25_info"
-            android:layout_toLeftOf="@id/pm25_info"
-            android:text="PM2.5"
-            android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/air"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pm25_info"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
-            android:text="空气状况:"
-            android:textSize="25sp"/>
-
-        <TextView
-            android:id="@+id/qlty_info2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/pm25_info"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@id/air"
-            android:text="良"
-            android:textSize="25sp"/>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/linearLayout2"
-            android:layout_alignStart="@+id/linearLayout2"
-            android:layout_below="@+id/air"
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="15dp"
-            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/pm25_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="17dp"
+                android:text="47"
+                android:textSize="85sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="影响："
-                android:textStyle="bold"
-                android:textSize="14sp"/>
+                android:layout_alignBottom="@id/pm25_info"
+                android:layout_toLeftOf="@id/pm25_info"
+                android:text="PM2.5"
+                android:textSize="20sp"/>
 
             <TextView
-                android:id="@+id/effect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout3"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="7dp"
-            android:orientation="horizontal">
-
-            <TextView
+                android:id="@+id/air"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="建议："
-                android:textStyle="bold"
-                android:textColor="#AA0000"
-                android:textSize="14sp"/>
+                android:layout_below="@id/pm25_info"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="7dp"
+                android:text="空气状况:"
+                android:textSize="20sp"/>
 
             <TextView
-                android:id="@+id/advice"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:textColor="#AA0000"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linearLyoutId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageViewId"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+                android:id="@+id/qlty_info2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pm25_info"
+                android:layout_marginTop="7dp"
+                android:layout_toRightOf="@id/air"
+                android:text="良"
+                android:textSize="20sp"/>
 
             <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp">
+                android:layout_alignLeft="@+id/linearLayout2"
+                android:layout_alignStart="@+id/linearLayout2"
+                android:layout_below="@+id/air"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="影响："
+                    android:textSize="12sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/effect"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:textStyle="bold"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearLayout3"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="建议："
+                    android:textColor="#BBAA0000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/advice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:textColor="#BBAA0000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLyoutId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageViewId"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:text="AQI:"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/aqiId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="70"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="主要污染物："
+                        android:textSize="18dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/pollutant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PM10"
+                        android:textSize="18dp"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/linearLyoutId"
+                android:layout_marginTop="1dp"
+                android:background="#50000000"/>
+
+            <LinearLayout
+                android:id="@+id/allIfirmationId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearLyoutId"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:text="AQI:"
-                    android:textSize="18sp"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/aqiId"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="70"
-                    android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="CO"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/coNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="0.88"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="PM10"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/pm10Number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="70"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="O3"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/o3Number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="132"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="SO2"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/so2Number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="8"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="NO2"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/no2Number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="10"
+                        android:textSize="18sp"/>
+                </LinearLayout>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="主要污染物："
-                    android:textSize="18dp"
-                    />
-
-                <TextView
-                    android:id="@+id/pollutant"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PM10"
-                    android:textSize="18dp"
-                    />
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="1dp"
-            android:layout_below="@+id/linearLyoutId"
-            android:background="#50000000"/>
-
-
-        <LinearLayout
-            android:id="@+id/allIfirmationId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/linearLyoutId"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp"
-            >
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="CO"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/coNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="0.88"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="PM10"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/pm10Number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="70"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="O3"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/o3Number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="132"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="SO2"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/so2Number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="8"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="NO2"
-                    android:textSize="18sp"/>
-
-                <TextView
-                    android:id="@+id/no2Number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="10"
-                    android:textSize="18sp"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-
-    </RelativeLayout>
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/mapLinearLeyoutId"
         android:layout_width="match_parent"
-        android:layout_marginTop="2dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp">
 
         <com.amap.api.maps2d.MapView
             xmlns:android="http://schemas.android.com/apk/res/android"

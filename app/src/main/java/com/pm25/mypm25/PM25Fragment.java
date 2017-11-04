@@ -2,7 +2,6 @@ package com.pm25.mypm25;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -95,6 +94,13 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         //初始化控件
         init(view);
 
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getActivity().getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+
         //显示地图
         mapView = (MapView) view.findViewById(R.id.map);
         //必须要写
@@ -109,6 +115,8 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         settings.setMyLocationButtonEnabled(true);
         // 是否可触发定位并显示定位层
         aMap.setMyLocationEnabled(true);
+
+
 
         //开始定位
         initLoc();
@@ -136,13 +144,9 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
 
     //定位
     private void initLoc() {
-        //初始化定位
-        mLocationClient = new AMapLocationClient(getActivity().getApplicationContext());
-        //设置定位回调监听
-        mLocationClient.setLocationListener(this);
-        //初始化定位参数
-        mLocationOption = new AMapLocationClientOption();
+
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        //会同时使用网络定位和GPS定位，优先返回最高精度的定位结果，以及对应的地址描述信息
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
@@ -151,9 +155,11 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         //设置是否强制刷新WIFI，默认为强制刷新
         mLocationOption.setWifiActiveScan(true);
         //设置是否允许模拟位置,默认为false，不允许模拟位置
-        mLocationOption.setMockEnable(false);
+        mLocationOption.setMockEnable(true);
         //设置定位间隔,单位毫秒,默认为2000ms
         mLocationOption.setInterval(2000);
+        //开启缓存机制
+        mLocationOption.setLocationCacheEnable(true);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         //启动定位
@@ -220,6 +226,7 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
                 if (forecastString2 != null) {
                     //阿里云天气预报 有缓存时直接解析数据
                     Forecast2 forecast2 = HttpUtil.handleForecastResponse2(forecastString2);
+                    Log.i(TAG, "53onLocationChanged: "+forecast2);
                     showResultInfo2(forecast2);
                 } else {
                     if (city_info != null && district_info != null && latitude_info != 0 && longitude_info != 0) {
@@ -231,7 +238,6 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
                         requestForecast2(longitude_data, latitude_data);
                     }
                 }
-
 
 
                 //下拉刷新
@@ -259,6 +265,8 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
                 mListener.onLocationChanged(amapLocation);
                 //添加图钉
                 aMap.addMarker(getMarkerOptions(amapLocation));
+
+
                 //获取定位信息
                 StringBuffer buffer = new StringBuffer();
                 buffer.append(amapLocation.getCountry() + "" + amapLocation.getProvince() + "" + amapLocation.getCity() + "" + amapLocation.getProvince() + "" + amapLocation.getDistrict() + "" + amapLocation.getStreet() + "" + amapLocation.getStreetNum());
@@ -352,7 +360,7 @@ public class PM25Fragment extends Fragment implements LocationSource, AMapLocati
         pollutant.setText(forecast2.getResult().getAqi().getPrimarypollutant());
         pm25.setText(forecast2.getResult().getAqi().getPm2_5());
         qlty_info.setText(forecast2.getResult().getAqi().getQuality());
-        imageView.setBackgroundColor(Color.parseColor(forecast2.getResult().getAqi().getAqiinfo().getColor()));
+//        imageView.setColorFilter(Color.parseColor(forecast2.getResult().getAqi().getAqiinfo().getColor()));
         advice.setText(forecast2.getResult().getAqi().getAqiinfo().getMeasure());
         effect.setText(forecast2.getResult().getAqi().getAqiinfo().getAffect());
     }
